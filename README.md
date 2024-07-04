@@ -1,16 +1,17 @@
 # survey
 
-A new Flutter project.
+survey 프로젝트의 클라이언트 입니다. flutter로 제작했습니다.
 
-## Getting Started
+## 프로젝트 설명
 
-This project is a starting point for a Flutter application.
+Survey는 사용자들이 설문조사를 응답하고 결과를 제공하는 애플리케이션입니다. 이 애플리케이션은 Flutter 프레임워크를 사용하여 개발되었으며, 아래와 같은 기능을 제공합니다:
 
-A few resources to get you started if this is your first Flutter project:
+- 사용자 인증 및 로그인 기능
+- 설문조사 목록 표시 및 응답 기능
+- 설문조사 결과의 시각화
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 목표
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Provider를 사용하여 MVVM 패턴으로 코딩합니다.
+- TDD를 준수하며 코딩합니다.
+
