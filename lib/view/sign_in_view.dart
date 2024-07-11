@@ -32,7 +32,7 @@ class _SigninViewState extends State<SignInView> {
 
     try {
       await Provider.of<AuthViewModel>(context, listen: false)
-          .login(email, password);
+          .signIn(email, password);
       // 성공적으로 로그인했을 때 추가 작업을 수행할 수 있습니다.
     } catch (e) {
       setState(() {
