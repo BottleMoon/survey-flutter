@@ -6,6 +6,7 @@ import 'package:survey/locator.dart';
 import 'package:survey/view/home_view.dart';
 import 'package:survey/view/sign_in_view.dart';
 import 'package:survey/viewModel/auth_view_model.dart';
+import 'package:survey/viewModel/survey_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ void main() async {
       ChangeNotifierProvider(
         create: (_) => GetIt.instance<AuthViewModel>(),
       ),
+      ChangeNotifierProvider(create: (_) => GetIt.instance<SurveyViewModel>())
     ],
     child: MyApp(),
   ));
