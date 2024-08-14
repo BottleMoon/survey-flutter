@@ -39,7 +39,6 @@ class _SurveyListViewState extends State<SurveyListView> {
           _scrollController.position.maxScrollExtent) {
         surveyViewModel.getSurveyList();
       }
-      ;
     });
 
     return Column(
@@ -50,10 +49,17 @@ class _SurveyListViewState extends State<SurveyListView> {
                 itemCount: surveyViewModel.items.length,
                 itemBuilder: (context, index) {
                   final item = surveyViewModel.items[index];
-                  return ListTile(
-                    title: Text(item.title),
-                    subtitle: Text(item.small_description),
-                  );
+                  return Container(
+                      margin: EdgeInsets.all(10),
+                      child: ListTile(
+                          title: Text(item.title),
+                          subtitle: Text(item.small_description),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              // 테두리 모양 설정
+                              side: BorderSide(color: Colors.black, width: 1)),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10)));
                 }))
       ],
     );
