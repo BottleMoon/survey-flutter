@@ -5,10 +5,10 @@ import '../viewModel/auth_view_model.dart';
 
 class SignInView extends StatefulWidget {
   @override
-  _SigninViewState createState() => _SigninViewState();
+  _SignInViewState createState() => _SignInViewState();
 }
 
-class _SigninViewState extends State<SignInView> {
+class _SignInViewState extends State<SignInView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;

@@ -25,8 +25,8 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      _storage.write(key: 'accessToken', value: data['access']);
-      _storage.write(key: 'refreshToken', value: data['refresh']);
+      await _storage.write(key: 'accessToken', value: data['access']);
+      await _storage.write(key: 'refreshToken', value: data['refresh']);
       return true;
     } else {
       throw Exception('Failed to Sign in');
