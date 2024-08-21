@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:survey/view/survey_detail_view.dart';
 import 'package:survey/viewModel/survey_view_model.dart';
 
 class SurveyListView extends StatefulWidget {
@@ -41,6 +42,13 @@ class _SurveyListViewState extends State<SurveyListView> {
       }
     });
 
+    void _tileOnTapped(int id) async {
+      await surveyViewModel.getSurveyDetail(id);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              SurveyDetailView(surveyDetail: surveyViewModel.surveyDetail)));
+    }
+
     return Column(
       children: [
         Expanded(
@@ -52,6 +60,7 @@ class _SurveyListViewState extends State<SurveyListView> {
                   return Container(
                       margin: EdgeInsets.all(10),
                       child: ListTile(
+                          onTap: () => _tileOnTapped(item.id),
                           title: Text(item.title),
                           subtitle: Text(item.small_description),
                           shape: RoundedRectangleBorder(
