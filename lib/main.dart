@@ -27,6 +27,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        title: 'Survey App',
+        theme: ThemeData(
+          // Set the overall background color of the app
+          scaffoldBackgroundColor: Colors.grey[100],
+          // Set the default color for Card widgets
+          cardTheme: CardTheme(
+            color: Colors.white,
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+          // Customize other theme properties as needed
+          primarySwatch: Colors.blue,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+          ),
+        ),
         home: Provider.of<AuthViewModel>(context).isSignIn
             ? HomeView()
             : SignInView());

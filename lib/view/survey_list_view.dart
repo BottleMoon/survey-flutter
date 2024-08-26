@@ -12,18 +12,19 @@ class SurveyListView extends StatefulWidget {
 
 class _SurveyListViewState extends State<SurveyListView> {
   late ScrollController _scrollController;
-  late double _scrollPosition;
-
-  _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {}
-  }
 
   @override
   void initState() {
+    super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    super.initState();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      Provider.of<SurveyViewModel>(context, listen: false).getSurveyList();
+    }
   }
 
   @override
@@ -34,43 +35,46 @@ class _SurveyListViewState extends State<SurveyListView> {
       surveyViewModel.getSurveyList();
     }
 
-    ScrollController _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        surveyViewModel.getSurveyList();
-      }
-    });
-
-    void _tileOnTapped(int id) async {
-      await surveyViewModel.getSurveyDetail(id);
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              SurveyDetailView(surveyDetail: surveyViewModel.surveyDetail)));
-    }
-
-    return Column(
-      children: [
-        Expanded(
-            child: ListView.builder(
-                controller: _scrollController,
-                itemCount: surveyViewModel.items.length,
-                itemBuilder: (context, index) {
-                  final item = surveyViewModel.items[index];
-                  return Container(
-                      margin: EdgeInsets.all(10),
-                      child: ListTile(
-                          onTap: () => _tileOnTapped(item.id),
-                          title: Text(item.title),
-                          subtitle: Text(item.small_description),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              // 테두리 모양 설정
-                              side: BorderSide(color: Colors.black, width: 1)),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10)));
-                }))
-      ],
+    return Container(
+      color: Colors.grey[100],
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: surveyViewModel.items.length,
+        itemBuilder: (context, index) {
+          final item = surveyViewModel.items[index];
+          return Card(
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              onTap: () => _tileOnTapped(item.id, surveyViewModel, context),
+              contentPadding: EdgeInsets.all(16),
+              title: Text(
+                item.title,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  item.small_description,
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                ),
+              ),
+              trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue),
+            ),
+          );
+        },
+      ),
     );
+  }
+
+  void _tileOnTapped(
+      int id, SurveyViewModel viewModel, BuildContext context) async {
+    await viewModel.getSurveyDetail(id);
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) =>
+          SurveyDetailView(surveyDetail: viewModel.surveyDetail),
+    ));
   }
 }

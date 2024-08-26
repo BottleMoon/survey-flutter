@@ -48,21 +48,36 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+        body: SafeArea(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(
+                hintText: 'Email',
+                prefixIcon: Icon(Icons.email),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(
+                hintText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 24),
             if (errorMessage != null) ...[
               Text(
                 errorMessage!,
@@ -74,11 +89,21 @@ class _SignInViewState extends State<SignInView> {
                 ? CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: _login,
-                    child: Text('Login'),
+                    child: Text(
+                      'Log In',
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
                   ),
           ],
         ),
       ),
-    );
+    ));
   }
 }
