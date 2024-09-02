@@ -71,10 +71,9 @@ class _SurveyListViewState extends State<SurveyListView> {
 
   void _tileOnTapped(
       int id, SurveyViewModel viewModel, BuildContext context) async {
-    await viewModel.getSurveyDetail(id);
+    await viewModel.setCurrentSurvey(id);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>
-          SurveyDetailView(surveyDetail: viewModel.surveyDetail),
+      builder: (context) => SurveyDetailView(),
     ));
   }
 }

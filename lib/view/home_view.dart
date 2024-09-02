@@ -43,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: _widgetOptions.elementAt(_currentIndex),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

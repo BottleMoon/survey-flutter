@@ -139,3 +139,6 @@ app.*.symbols
 
 # .env
 .env
+
+# deploy
+deploy.sh

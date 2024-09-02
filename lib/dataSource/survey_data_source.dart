@@ -11,11 +11,16 @@ abstract class SurveyDataSource {
   Future<List<SurveyListItem>> getSurveyList();
 
   Future<SurveyDetail> getSurveyDetail(int surveyId);
+
+  Future<bool> submitSurvey(int surveyId, Map<int, dynamic> request);
+
+  Future<bool> isSurveyAvailable(int surveyId);
 }
 
 class SurveyDataSourceImpl implements SurveyDataSource {
   static String next = "";
   static String? _accessToken = null;
+  static bool isEnd = false;
 
   Future<void> _readAccessToken() async {
     final _storage = const FlutterSecureStorage();
@@ -28,6 +33,10 @@ class SurveyDataSourceImpl implements SurveyDataSource {
   @override
   Future<List<SurveyListItem>> getSurveyList() async {
     // TODO: implement getSurveyList
+
+    if (isEnd) {
+      throw Exception("no more data");
+    }
 
     await _readAccessToken();
 
@@ -42,9 +51,13 @@ class SurveyDataSourceImpl implements SurveyDataSource {
         .get(_requestUrl, headers: {"authorization": "Bearer $_accessToken"});
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> body = json.decode(response.body);
+      Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> data = body["results"];
-      next = body["next"];
+      if (body["next"] != null) {
+        next = body["next"];
+      } else {
+        isEnd = true;
+      }
       List<SurveyListItem> items =
           data.map((dynamic item) => SurveyListItem.fromJson(item)).toList();
       return items;
@@ -62,34 +75,47 @@ class SurveyDataSourceImpl implements SurveyDataSource {
         Uri.parse("${dotenv.get("SURVEY_API_URL")}/$surveyId"),
         headers: {"authorization": "Bearer $_accessToken"});
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
+      var data = json.decode(utf8.decode(response.bodyBytes));
       print(data);
       return SurveyDetail.fromJson(data);
     } else {
       throw Exception("failed load survey id: $surveyId");
     }
   }
-}
 
-class SurveyDataSourceTestImpl implements SurveyDataSource {
-  List<SurveyListItem> _testList() {
-    List<SurveyListItem> surveys = [];
-    for (int i = 1; i < 50; i++) {
-      surveys.add(SurveyListItem(i, "title$i", "description$i"));
+  @override
+  Future<bool> submitSurvey(int surveyId, Map<int, dynamic> request) async {
+    await _readAccessToken();
+
+    // 딕셔너리를 리스트로 변환
+    List<Map<String, dynamic>> formattedRequest = request.entries
+        .map((entry) => {"question_id": entry.key, "answer": entry.value})
+        .toList();
+
+    var response = await http.post(
+      Uri.parse("${dotenv.get("SURVEY_API_URL")}/$surveyId/responses/"),
+      headers: {
+        "Authorization": "Bearer $_accessToken",
+        "Content-Type": "application/json"
+      },
+      body: json.encode(formattedRequest),
+    );
+
+    if (response.statusCode != 201) {
+      return false;
+    } else {
+      return true;
     }
-    return surveys;
   }
 
   @override
-  Future<List<SurveyListItem>> getSurveyList() {
-    return Future(() {
-      return _testList();
-    });
-  }
-
-  @override
-  Future<SurveyDetail> getSurveyDetail(int surveyId) {
-    // TODO: implement getSurveyDetail
-    throw UnimplementedError();
+  Future<bool> isSurveyAvailable(int surveyId) async {
+    var response = await http.get(Uri.parse(
+        "${dotenv.get("SURVEY_API_URL")}/$surveyId/check-availability/"));
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

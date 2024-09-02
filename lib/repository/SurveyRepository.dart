@@ -15,4 +15,12 @@ class SurveyRepository {
   Future<SurveyDetail> getSurveyDetail(int surveyId) async {
     return await _surveyDataSource.getSurveyDetail(surveyId);
   }
+
+  Future<bool> submitSurvey(int surveyId, Map<int, dynamic> request) async {
+    return await _surveyDataSource.submitSurvey(surveyId, request);
+  }
+
+  Future<bool> isSurveyAvailable(int surveyId) async {
+    return await _surveyDataSource.isSurveyAvailable(surveyId);
+  }
 }
